@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>quilicicf.its.graph.maker.test</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <description>Tests writing the architecture graph in the README.md</description>
+
+    <properties>
+        <maven.test.skip>true</maven.test.skip>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+    </properties>
+
+    <modules>
+        <module>modules/module-1</module>
+        <module>modules/module-2</module>
+        <module>modules/module-3</module>
+        <module>modules/module-4</module>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <modules>
+                <module>dev-modules/mock</module>
+            </modules>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>quilicicf</groupId>
+                <artifactId>arch-graph-maker-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>arch-graph-maker</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <shouldDisplayGraphInLogs>true</shouldDisplayGraphInLogs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
