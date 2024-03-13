@@ -14,8 +14,8 @@
     <properties>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <skipIts>true</skipIts>
-        <invoker.skip>${skipIts}</invoker.skip>
+        <skipTests>false</skipTests>
+        <invoker.skip>${skipTests}</invoker.skip>
     </properties>
 
     <dependencies>
