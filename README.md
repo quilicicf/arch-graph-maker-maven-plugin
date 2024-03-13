@@ -36,7 +36,7 @@ Use with [JitPack](https://jitpack.io/) for now. I might be talked into releasin
                 <artifactId>arch-graph-maker-maven-plugin</artifactId>
                 <version>1.0.0</version>
                 <inherited>
-                    <!-- Required so that the plugin is only run on the parent pom and not all sub-modules! -->
+                    <!-- Required so that the plugin is only run on the parent pom and not all submodules! -->
                     false
                 </inherited>
                 <configuration>
