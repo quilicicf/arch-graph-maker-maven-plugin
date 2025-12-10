@@ -4,13 +4,21 @@
 
 <!-- TOC START -->
 
-* [1.0.2](#102)
+* [1.1.0](#110)
+* [~~1.0.2~~](#102)
 * [~~1.0.1~~](#101)
 * [1.0.0](#100)
 
 <!-- TOC END -->
 
-## 1.0.2
+## 1.1.0
+
+* __Improvements__
+  * Deliver sources
+* __Bugs__
+  * Fix broken release
+
+## ~~1.0.2~~
 
 * __Bugs__
   * Fix broken release
