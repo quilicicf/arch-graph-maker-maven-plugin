@@ -206,59 +206,6 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 			.build();
 	}
 
-//	private Tree buildTree(final MavenProject project, final Map<Path, MavenProject> projectsByPomPath) {
-//		final Tree tree = new Tree(createParentProject(project));
-//		final Path pomFolderPath = project.getModel()
-//			.getPomFile()
-//			.toPath()
-//			.getParent();
-//		tree.addChildren(
-//			project.getModules()
-//				.stream()
-//				.map(module -> new ModuleAndPomPath(module, pomFolderPath))
-//				.filter(moduleAndPomPath -> projectsByPomPath.containsKey(moduleAndPomPath.getPomPath()))
-//				.map(moduleAndPomPath -> createChildProject(
-//					projectsByPomPath.get(moduleAndPomPath.getPomPath()),
-//					moduleAndPomPath
-//				))
-//				.collect(toMap(
-//					ProjectWithMetadata::getModule,
-//					child -> recursiveBuildTree(child, projectsByPomPath)
-//				))
-//		);
-//
-//		return tree;
-//	}
-//
-//	private Tree recursiveBuildTree(final ProjectWithMetadata project,
-//																	final Map<Path, MavenProject> projectsByPomPath) {
-//		final Tree tree = new Tree(project);
-//		final Path pomFolderPath = project
-//			.getPomPath()
-//			.getParent();
-//		tree.addChildren(
-//			project
-//				.getProject()
-//				.getModules()
-//				.stream()
-//				.map(module -> new ModuleAndPomPath(module, pomFolderPath))
-//				.filter(moduleAndPomPath -> projectsByPomPath.containsKey(moduleAndPomPath.getPomPath()))
-//				.map(moduleAndPomPath -> createChildProject(
-//					projectsByPomPath.get(moduleAndPomPath.getPomPath()),
-//					moduleAndPomPath
-//				))
-//				.collect(toMap(
-//					ProjectWithMetadata::getModule,
-//					child -> recursiveBuildTree(child, projectsByPomPath)
-//				))
-//		);
-//		return tree;
-//	}
-//
-//	private Path addPomXmlFileName(final Path path) {
-//		return path.resolve("pom.xml");
-//	}
-
 	public static <T> T coalesce(final T a, final T b) {
 		return a != null ? a : b;
 	}

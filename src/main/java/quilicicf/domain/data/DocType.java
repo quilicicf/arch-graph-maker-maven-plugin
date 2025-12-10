@@ -11,7 +11,7 @@ public enum DocType {
 
 		@Override
 		public String wrapGraph(final String graph) {
-			return format("```mermaid\n%s\n```", graph);
+			return format("\n```mermaid\n%s\n```\n", graph);
 		}
 	},
 	ASCIIDOC {
@@ -22,7 +22,7 @@ public enum DocType {
 
 		@Override
 		public String wrapGraph(final String graph) {
-			return format("[mermaid]\n....\n%s\n....", graph);
+			return format("\n[mermaid]\n....\n%s\n....\n", graph);
 		}
 	},
 	ASCIIDOC_GITHUB {
@@ -33,7 +33,7 @@ public enum DocType {
 
 		@Override
 		public String wrapGraph(final String graph) {
-			return format("[source,mermaid]\n....\n%s\n....", graph); // Yeah, GitHub renders source blocks instead of custom blocks...
+			return format("\n[source,mermaid]\n....\n%s\n....\n", graph); // Yeah, GitHub renders source blocks instead of custom blocks...
 		}
 	},
 	;
