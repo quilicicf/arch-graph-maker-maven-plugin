@@ -15,6 +15,7 @@ It uses the `artifactId` & `description` fields of module poms to document what 
 Use with [JitPack](https://jitpack.io/) for now. I might be talked into releasing on Maven central in the future, no promises.
 
 ```xml
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 				 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -40,6 +41,16 @@ Use with [JitPack](https://jitpack.io/) for now. I might be talked into releasin
 					<!-- Required so that the plugin is only run on the parent pom and not all submodules! -->
 					false
 				</inherited>
+				<executions>
+					<execution>
+						<!-- If you wish to plug execution to lifecycle -->
+						<id>create-architecture-schema</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>arch-graph-maker</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<!-- Configuration below is the default one (so same as if you don't put any conf at all -->
 					<shouldDisplayGraphInLogs>false</shouldDisplayGraphInLogs>
