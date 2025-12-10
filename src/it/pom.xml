@@ -34,7 +34,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>quilicicf</groupId>
+                <groupId>com.github.quilicicf</groupId>
                 <artifactId>arch-graph-maker-maven-plugin</artifactId>
                 <version>@project.version@</version>
                 <inherited>false</inherited>

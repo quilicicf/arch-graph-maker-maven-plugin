@@ -9,5 +9,12 @@
         <module name="arch-graph-maker-maven-plugin" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="module-1" target="21" />
+      <module name="module-2" target="21" />
+      <module name="module-3" target="21" />
+      <module name="module-4" target="21" />
+      <module name="parent" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
