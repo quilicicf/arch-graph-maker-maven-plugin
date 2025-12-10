@@ -14,7 +14,7 @@
 	<properties>
 		<!-- NOTE : not supported by Jitpack ATM <maven.compiler.release>21</maven.compiler.release> -->
 		<java-version>21</java-version>
-		<source-encoding>utf-8</source-encoding>
+		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 
 		<!-- Dependencies -->
 		<lombok-version>1.18.42</lombok-version>
@@ -73,7 +73,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin-version}</version>
 				<configuration>
-					<encoding>${source-encoding}</encoding>
+					<release>${java-version}</release>
 					<source>${java-version}</source>
 					<target>${java-version}</target>
 					<annotationProcessorPaths>

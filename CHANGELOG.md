@@ -4,12 +4,18 @@
 
 <!-- TOC START -->
 
+* [1.2.0](#120)
 * [1.1.0](#110)
 * [~~1.0.2~~](#102)
 * [~~1.0.1~~](#101)
 * [1.0.0](#100)
 
 <!-- TOC END -->
+
+## 1.2.0
+
+* __Improvements__
+  * Add missing line breaks between comments
 
 ## 1.1.0
 
