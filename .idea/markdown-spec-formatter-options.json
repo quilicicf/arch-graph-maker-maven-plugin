@@ -1,10 +1,5 @@
 {
   "markdownFormatterOptions": {
     "watermark": "top"
-  },
-  "stringifyOptions": {
-    "bullet": "-",
-    "emphasis": "_",
-    "strong": "*"
   }
 }
