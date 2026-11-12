@@ -37,7 +37,7 @@ flowchart BT
 def findTextInFile (final String filePath, final String textToSearchFor) {
   final File buildLog = new File((String) basedir, filePath)
   assert buildLog.exists()
-  assert buildLog.text.contains(textToSearchFor)
+  assert buildLog.text.replaceAll("\r\n", "\n").contains(textToSearchFor.replaceAll("\r\n", "\n"))
 }
 
 findTextInFile('build.log', "[INFO] ${EXPECTED_FLOW_CHART}")
