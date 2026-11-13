@@ -146,7 +146,7 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 				.build(projectPomPath.toFile(), request)
 				.getProject();
 		} catch (final ProjectBuildingException e) {
-			getLog().warn("Impossible to resolve module %s from parent pom".formatted(module), e);
+			getLog().warn("Impossible to resolve module %s from parent pom".formatted(module));
 			return null;
 		}
 	}
