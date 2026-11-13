@@ -142,4 +142,48 @@
 			</plugin> <!-- sources -->
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<property>
+					<name>env.DEV</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- to avoid command "mvn install -DskipTests" when verifying this project.
+						 In one command, we are able to check new developments, useful for dev and ci.
+						 "mvn verify -P dev" -->
+						<groupId>com.kohlschutter.mavenplugins</groupId>
+						<artifactId>copy-rename-maven-plugin</artifactId>
+						<version>2.0.0</version>
+						<executions>
+							<execution>
+								<id>copy-artifact-to-local-repository</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<fileSets>
+										<fileSet>
+											<sourceFile>${project.basedir}/pom.xml</sourceFile>
+											<destinationFile>${user.home}/.m2/repository/com/github/quilicicf/${project.artifactId}/${project.version}/${project.build.finalName}.pom</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>${project.build.directory}/${project.build.finalName}.jar</sourceFile>
+											<destinationFile>${user.home}/.m2/repository/com/github/quilicicf/${project.artifactId}/${project.version}/${project.build.finalName}.jar</destinationFile>
+										</fileSet>
+									</fileSets>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
