@@ -25,8 +25,23 @@
     <profiles>
         <profile>
             <id>dev</id>
-            <modules>
+						<activation>
+							<activeByDefault>true</activeByDefault>
+						</activation>
+						<modules>
                 <module>dev-modules/mock</module>
+                <module>dev-modules/bad-mock</module>
+            </modules>
+        </profile>
+				<profile>
+            <id>dev-completly-optional</id>
+						<activation>
+							<property>
+								<name>env.DEV</name>
+							</property>
+						</activation>
+            <modules>
+                <module>dev-modules/other-bad-mock</module>
             </modules>
         </profile>
     </profiles>
