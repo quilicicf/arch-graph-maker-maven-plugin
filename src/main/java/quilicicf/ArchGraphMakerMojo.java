@@ -16,11 +16,11 @@ import quilicicf.domain.data.Node;
 import javax.inject.Inject;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import static java.nio.file.Files.exists;
 import static java.util.function.Function.identity;
@@ -76,13 +76,13 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 	String endTag;
 
 	@Inject
-	public ArchGraphMakerMojo(final ProjectBuilder projectBuilder) {
+	public ArchGraphMakerMojo (final ProjectBuilder projectBuilder) {
 		super();
 		this.projectBuilder = projectBuilder;
 	}
 
 	@Override
-	public void execute() throws MojoFailureException {
+	public void execute () throws MojoFailureException {
 		if (relativePathToDocFile.contains("..")) {
 			throw new MojoFailureException("Cannot update doc files outside of the folder where the pom is.");
 		}
@@ -91,6 +91,8 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 		if (!exists(docFilePath)) {
 			throw new MojoFailureException("Cannot find doc file: " + docFilePath);
 		}
+
+		getLog().debug("Start analysis of project %s".formatted(this.project.getArtifactId()));
 
 		final Map<String, List<MavenProject>> profileChildren = findProfileChildren();
 		final Graph graph = buildGraph(project, projects, profileChildren);
@@ -107,7 +109,7 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 		}
 	}
 
-	private Map<String, List<MavenProject>> findProfileChildren() {
+	private Map<String, List<MavenProject>> findProfileChildren () {
 		return project.getModel()
 			.getProfiles()
 			.stream()
@@ -117,11 +119,12 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 			));
 	}
 
-	private List<MavenProject> findProfileChildren(final Profile profile) {
+	private List<MavenProject> findProfileChildren (final Profile profile) {
 		return profile
 			.getModules()
 			.stream()
 			.map(this::resolveProject)
+			.filter(Objects::nonNull)
 			.collect(toList());
 	}
 
@@ -129,7 +132,7 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 	 * Used to resolve modules that are not in {@link ArchGraphMakerMojo#projects}
 	 * because they are only activated by profiles.
 	 */
-	private MavenProject resolveProject(final String module) {
+	private MavenProject resolveProject (final String module) {
 		final Path projectPomPath = project.getModel()
 			.getPomFile()
 			.toPath()
@@ -137,27 +140,30 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 			.resolve(module)
 			.resolve("pom.xml");
 		try {
+			getLog().debug("Start building project information for module %s".formatted(module));
 			final DefaultProjectBuildingRequest request = new DefaultProjectBuildingRequest().setRepositorySession(session);
 			return projectBuilder
 				.build(projectPomPath.toFile(), request)
 				.getProject();
 		} catch (final ProjectBuildingException e) {
-			throw new RuntimeException("Impossible to resolve module %s from parent pom".formatted(module), e);
+			getLog().warn("Impossible to resolve module %s from parent pom".formatted(module), e);
+			return null;
 		}
 	}
 
-	private Graph buildGraph(final MavenProject parent,
-													 final List<MavenProject> standardProjects,
-													 final Map<String, List<MavenProject>> profileChildren) {
+	private Graph buildGraph (final MavenProject parent,
+														final List<MavenProject> standardProjects,
+														final Map<String, List<MavenProject>> profileChildren) {
 		final Model model = parent.getModel();
+		final List<MavenProject> standardProjectsWithoutRoot = standardProjects.stream()
+			.filter(not(parent::equals))
+			.toList();
+		final List<MavenProject> standardProjectsWithoutDefaultProfiles = this.filterDuplicatedProjects(standardProjectsWithoutRoot, profileChildren);
 		return Graph.builder()
 			.setId(model.getArtifactId())
 			.setIsSubgraph(false)
 			.setNodes(buildNodes(
-				standardProjects
-					.stream()
-					.filter(not(parent::equals))
-					.toList()
+				standardProjectsWithoutDefaultProfiles
 			))
 			.setSubGraphs(
 				profileChildren
@@ -172,7 +178,20 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 			.build();
 	}
 
-	private Graph buildSubGraph(final Entry<String, List<MavenProject>> entry) {
+	private List<MavenProject> filterDuplicatedProjects (final List<MavenProject> standardProjectsWithoutRoot, final Map<String, List<MavenProject>> profileChildren) {
+		final List<MavenProject> fullListOfProfileChildren = profileChildren.values().stream().
+			flatMap(Collection::stream)
+			.toList();
+		return standardProjectsWithoutRoot.stream()
+			.filter(mavenProject -> this.isNotProfileChildren(mavenProject, fullListOfProfileChildren))
+			.toList();
+	}
+
+	private boolean isNotProfileChildren (final MavenProject mavenProject, final List<MavenProject> fullListOfProfileChildren) {
+		return !fullListOfProfileChildren.contains(mavenProject);
+	}
+
+	private Graph buildSubGraph (final Entry<String, List<MavenProject>> entry) {
 		return Graph.builder()
 			.setId(entry.getKey())
 			.setIsSubgraph(true)
@@ -180,7 +199,7 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 			.build();
 	}
 
-	private Map<String, Node> buildNodes(final List<MavenProject> children) {
+	private Map<String, Node> buildNodes (final List<MavenProject> children) {
 		return children
 			.stream()
 			.map(this::buildNode)
@@ -190,7 +209,7 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 			));
 	}
 
-	private Node buildNode(final MavenProject project) {
+	private Node buildNode (final MavenProject project) {
 		final Model model = project.getModel();
 		return Node.builder()
 			.setId(model.getArtifactId())
@@ -206,7 +225,7 @@ public class ArchGraphMakerMojo extends AbstractMojo {
 			.build();
 	}
 
-	public static <T> T coalesce(final T a, final T b) {
+	public static <T> T coalesce (final T a, final T b) {
 		return a != null ? a : b;
 	}
 }
